@@ -155,13 +155,13 @@ def save_dat(filepath,
     
     print("Exporting DAT: %r..." % (filepath))
     
-    time1 = time.clock()
+    time1 = time.perf_counter()
     file = open(filepath, 'wb')
     
     export_object(file, export_ob, apply_modifiers)
    
     # end write dat file
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
     file.close()
 
 

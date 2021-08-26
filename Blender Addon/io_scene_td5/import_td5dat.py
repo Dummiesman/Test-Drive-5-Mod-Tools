@@ -226,17 +226,14 @@ def load_dat(filepath,
 
     print("importing TD5 DAT: %r..." % (filepath))
 
-    if bpy.ops.object.select_all.poll():
-        bpy.ops.object.select_all(action='DESELECT')
-
-    time1 = time.clock()
+    time1 = time.perf_counter()
     file = open(filepath, 'rb')
     file_name = os.path.splitext(os.path.basename(filepath))[0]
     
     # import
     import_model(file, file_name)
         
-    print(" done in %.4f sec." % (time.clock() - time1))
+    print(" done in %.4f sec." % (time.perf_counter() - time1))
     
     file.close()
 
