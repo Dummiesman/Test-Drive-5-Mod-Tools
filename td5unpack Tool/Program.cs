@@ -105,13 +105,19 @@ namespace td5unpack
                 reader.BaseStream.Seek(baseOffset + offset, SeekOrigin.Begin);
 
                 //read and unpack sub models
+                //we read one extra here because TD6 has a 0 in front of the list
+                //and we probably will never overrun a file doing this
                 int numModels = reader.ReadInt32();
-                List<int> modelOffsets = new List<int>(numModels);
 
-                for (int j = 0; j < numModels; j++)
-                {
+                List<int> modelOffsets = new List<int>(numModels + 1);
+                for (int j = 0; j < numModels + 1; j++)
                     modelOffsets.Add(reader.ReadInt32());
-                }
+
+                if (modelOffsets[0] == 0 || modelOffsets[0] == 1) // TD6
+                    modelOffsets.RemoveAt(0);
+                else
+                    modelOffsets.RemoveAt(modelOffsets.Count - 1);
+
                 for (int j = 0; j < numModels; j++)
                 {
                     bool isLast = (j == numModels - 1);
