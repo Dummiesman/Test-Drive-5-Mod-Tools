@@ -1,4 +1,5 @@
 # Test-Drive-5-Mod-Tools
+[![Build status](https://ci.appveyor.com/api/projects/status/k4src25ypt8yg92u/branch/main?svg=true)](https://ci.appveyor.com/project/Dummiesman/test-drive-5-mod-tools/branch/main)
 
 ![Example level import](preview.png)
 
