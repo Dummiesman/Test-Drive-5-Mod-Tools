@@ -42,7 +42,7 @@ class ImportTD5Level(bpy.types.Operator, ImportHelper):
     """Import an entire level from Test Drive 5"""
     bl_idname = "import_scene.td5level"
     bl_label = 'Import Test Drive 5 Level'
-    bl_optoins = {'UNDO'}
+    bl_options = {'UNDO'}
     
     filename_ext = "*"
     filter_glob: StringProperty(default="*", options={'HIDDEN'})
