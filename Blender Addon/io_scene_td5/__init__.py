@@ -3,7 +3,7 @@
 # This program is licensed under Creative Commons BY-NC-SA:
 # https://creativecommons.org/licenses/by-nc-sa/3.0/
 #
-# Created by Dummiesman, 2021
+# Created by Dummiesman, 2021-2025
 #
 # ##### END LICENSE BLOCK #####
 
@@ -37,60 +37,59 @@ from bpy_extras.io_utils import (
         ExportHelper,
         )
 
-
-class ImportTD5Level(bpy.types.Operator, ImportHelper):
-    """Import an entire level from Test Drive 5"""
-    bl_idname = "import_scene.td5level"
-    bl_label = 'Import Test Drive 5 Level'
-    bl_options = {'UNDO'}
-    
-    filename_ext = "*"
-    filter_glob: StringProperty(default="*", options={'HIDDEN'})
-    
-    def execute(self, context):
-        selected_dir = self.filepath
-        if not os.path.isdir(selected_dir) and os.path.isfile(selected_dir):
-            selected_dir = os.path.dirname(os.path.abspath(self.filepath))
-        
-        models_dir = os.path.join(selected_dir, "models")
-        textures_dir = os.path.join(selected_dir, "textures")
-        textures_dir_exists = os.path.exists(textures_dir)
-        
-        if not os.path.exists(models_dir):
-            raise Exception("Models directory does not exist within this level direectory. Please run td5unpack on the models.dat file, and optionally the textures.dat file.")
-        if not textures_dir_exists:
-            print("Textures directory missing, textures will not be loaded.")
-            
-        print("Importing level " + selected_dir)
-        print("Importing models...")
-        
-        # import models
-        file_list = sorted(os.listdir(models_dir))
-        obj_list = [item for item in file_list if item.endswith('.dat')]
-
-        for item in obj_list:
-            path_to_file = os.path.join(models_dir, item)
-            bpy.ops.import_mesh.td5dat(filepath = path_to_file)
-            
-        # load in textures
-        if textures_dir_exists:
-            print("Loading textures...")
-            
-            for mat in bpy.data.materials:
-                if mat.name.startswith("TD5Material"):
-                    texnum = mat.name[12:]
-                    texpath = os.path.join(textures_dir, "texture_" + texnum + ".png")
-                    if os.path.isfile(texpath):
-                        img = bpy.data.images.load(texpath)
-                        
-                        tex_image_node = mat.node_tree.nodes.new('ShaderNodeTexImage')
-                        tex_image_node.image = img
-                        
-                        bsdf = mat.node_tree.nodes["Principled BSDF"]
-                        mat.node_tree.links.new(bsdf.inputs['Base Color'], tex_image_node.outputs['Color'])
-         
-        print("Level import complete")
-        return {'FINISHED'}
+##class ImportTD5Level(bpy.types.Operator, ImportHelper):
+##    """Import an entire level from Test Drive 5"""
+##    bl_idname = "import_scene.td5level"
+##    bl_label = 'Import Test Drive 5 Level'
+##    bl_optoins = {'UNDO'}
+##    
+##    filename_ext = "*"
+##    filter_glob: StringProperty(default="*", options={'HIDDEN'})
+##    
+##    def execute(self, context):
+##        selected_dir = self.filepath
+##        if not os.path.isdir(selected_dir) and os.path.isfile(selected_dir):
+##            selected_dir = os.path.dirname(os.path.abspath(self.filepath))
+##        
+##        models_dir = os.path.join(selected_dir, "models")
+##        textures_dir = os.path.join(selected_dir, "textures")
+##        textures_dir_exists = os.path.exists(textures_dir)
+##        
+##        if not os.path.exists(models_dir):
+##            raise Exception("Models directory does not exist within this level direectory. Please run td5unpack on the models.dat file, and optionally the textures.dat file.")
+##        if not textures_dir_exists:
+##            print("Textures directory missing, textures will not be loaded.")
+##            
+##        print("Importing level " + selected_dir)
+##        print("Importing models...")
+##        
+##        # import models
+##        file_list = sorted(os.listdir(models_dir))
+##        obj_list = [item for item in file_list if item.endswith('.dat')]
+##
+##        for item in obj_list:
+##            path_to_file = os.path.join(models_dir, item)
+##            bpy.ops.import_mesh.td5dat(filepath = path_to_file)
+##            
+##        # load in textures
+##        if textures_dir_exists:
+##            print("Loading textures...")
+##            
+##            for mat in bpy.data.materials:
+##                if mat.name.startswith("TD5Material"):
+##                    texnum = mat.name[12:]
+##                    texpath = os.path.join(textures_dir, "texture_" + texnum + ".png")
+##                    if os.path.isfile(texpath):
+##                        img = bpy.data.images.load(texpath)
+##                        
+##                        tex_image_node = mat.node_tree.nodes.new('ShaderNodeTexImage')
+##                        tex_image_node.image = img
+##                        
+##                        bsdf = mat.node_tree.nodes["Principled BSDF"]
+##                        mat.node_tree.links.new(bsdf.inputs['Base Color'], tex_image_node.outputs['Color'])
+##         
+##        print("Level import complete")
+##        return {'FINISHED'}
     
 
 class ImportTD5DAT(bpy.types.Operator, ImportHelper):
@@ -117,7 +116,7 @@ class ImportTD6Level(bpy.types.Operator, ImportHelper):
     """Import an entire level from Test Drive 6"""
     bl_idname = "import_scene.td6level"
     bl_label = 'Import Test Drive 6 Level'
-    bl_optoins = {'UNDO'}
+    bl_options = {'UNDO'}
     
     filename_ext = "*"
     filter_glob: StringProperty(default="*", options={'HIDDEN'})
@@ -216,6 +215,25 @@ class ImportTD6DAT(bpy.types.Operator, ImportHelper):
 
         return import_td6dat.load(self, context, **keywords)
         
+class ImportTDO3(bpy.types.Operator, ImportHelper):
+    """Import from Test Drive Off-Road 3 file format (.dmp/.mp)"""
+    bl_idname = "import_mesh.tdo3"
+    bl_label = 'Import Test Drive Off-Road 3 DMP/MP'
+    bl_options = {'UNDO'}
+
+    filename_ext = ".dmp"
+    filter_glob: StringProperty(default="*.dmp;*.mp", options={'HIDDEN'})
+
+    def execute(self, context):
+        from . import import_tdo3dat
+        keywords = self.as_keywords(ignore=("axis_forward",
+                                            "axis_up",
+                                            "filter_glob",
+                                            "check_existing",
+                                            ))
+
+        return import_tdo3dat.load(self, context, **keywords)
+        
 class ExportTD5DAT(bpy.types.Operator, ExportHelper):
     """Export to Test Drive 5 file format (.dat)"""
     bl_idname = "export_mesh.td5dat"
@@ -254,8 +272,8 @@ def menu_func_import_dat5(self, context):
 def menu_func_import_dat6(self, context):
     self.layout.operator(ImportTD6DAT.bl_idname, text="Test Drive 6 (.dat)")
     
-def menu_func_import_level5(self, context):
-    self.layout.operator(ImportTD5Level.bl_idname, text="Test Drive 5 Level")
+def menu_func_import_dat_o3(self, context):
+    self.layout.operator(ImportTDO3.bl_idname, text="Test Drive Off-Road 3 (.dmp/.mp)")
     
 def menu_func_import_level6(self, context):
     self.layout.operator(ImportTD6Level.bl_idname, text="Test Drive 6 Level")
@@ -266,23 +284,27 @@ def register():
     bpy.utils.register_class(ImportTD6DAT)
     bpy.utils.register_class(ImportTD6Level)
     bpy.utils.register_class(ImportTD5DAT)
-    bpy.utils.register_class(ImportTD5Level)
+    #bpy.utils.register_class(ImportTD5Level)
     bpy.utils.register_class(ExportTD5DAT)
+    bpy.utils.register_class(ImportTDO3)
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import_dat6)
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import_dat5)
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import_level6)
-    bpy.types.TOPBAR_MT_file_import.append(menu_func_import_level5)
+    bpy.types.TOPBAR_MT_file_import.append(menu_func_import_dat_o3)
+    #bpy.types.TOPBAR_MT_file_import.append(menu_func_import_level5)
     bpy.types.TOPBAR_MT_file_export.append(menu_func_export_dat)
 
 
 def unregister():
     bpy.types.TOPBAR_MT_file_export.remove(menu_func_export_dat)
+    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_dat_o3)
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_level6)
-    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_level5)
+    #bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_level5)
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_dat6)
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import_dat5)
+    bpy.utils.unregister_class(ImportTDO3)
     bpy.utils.unregister_class(ExportTD5DAT)
-    bpy.utils.unregister_class(ImportTD5Level)
+    #bpy.utils.unregister_class(ImportTD5Level)
     bpy.utils.unregister_class(ImportTD5DAT)
     bpy.utils.unregister_class(ImportTD6Level)
     bpy.utils.unregister_class(ImportTD6DAT)

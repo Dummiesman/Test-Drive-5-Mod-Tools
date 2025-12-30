@@ -3,7 +3,7 @@
 # This program is licensed under Creative Commons BY-NC-SA:
 # https://creativecommons.org/licenses/by-nc-sa/3.0/
 #
-# Created by Dummiesman, 2021
+# Created by Dummiesman, 2021-2025
 #
 # ##### END LICENSE BLOCK #####
 
