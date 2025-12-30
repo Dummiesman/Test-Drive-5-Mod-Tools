@@ -127,9 +127,9 @@ def import_model(file, obj_name, is_track):
             face.material_index = face_materials[x]
             
             # set uvs
-            face.loops[0][uv_layer].uv = uvs[tri_indices[0]]
+            face.loops[0][uv_layer].uv = uvs[tri_indices[2]]
             face.loops[1][uv_layer].uv = uvs[tri_indices[1]]
-            face.loops[2][uv_layer].uv = uvs[tri_indices[2]]
+            face.loops[2][uv_layer].uv = uvs[tri_indices[0]]
         except Exception as e:
             print(str(e))
     
