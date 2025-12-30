@@ -6,12 +6,12 @@
 A small set of tools to mod Test Drive 5 and 6. 
 
 What's supported?
-|                         | Test Drive 4 | Test Drive 5 | Test Drive 6 |
-|-------------------------|--------------|--------------|--------------|
-| Importing Levels        | x            | ✓            | ✓            |
-| Importing Other Objects | x            | ✓            | ✓            |
-| Exporting Levels        | x            | x            | x            |
-| Exporting Other Objects | x            | ✓            | x            |
+|                         | Test Drive 4 | Test Drive 5 | Test Drive 6 | Test Drive Off-Road 3 |
+|-------------------------|--------------|--------------|--------------|--------------|
+| Importing Levels        | x            | ✓            | ✓            | ✓            |
+| Importing Other Objects | x            | ✓            | ✓            | ✓            |
+| Exporting Levels        | x            | x            | x            | x            |
+| Exporting Other Objects | x            | ✓            | x            | x            |
 
 ### td5unpack
 This tool unpacks the models.dat/textures.dat files from levels into formats readable by the Blender add-on
